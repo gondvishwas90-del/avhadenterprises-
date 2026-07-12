@@ -1,65 +1,147 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useState } from "react";
+import Navbar from "@/components/Navbar";
+import Hero from "@/components/Hero";
+import BusinessEcosystem from "@/components/BusinessEcosystem";
+import WebsiteIntelligence from "@/components/WebsiteIntelligence";
+import BuildFlow from "@/components/BuildFlow";
+import LogoMarquee from "@/components/LogoMarquee";
+import Metrics from "@/components/Metrics";
+import About from "@/components/About";
+import WhyChooseUs from "@/components/WhyChooseUs";
+import Expertise from "@/components/Expertise";
+import Challenges from "@/components/Challenges";
+import ProcessTimeline from "@/components/ProcessTimeline";
+import CaseStudies from "@/components/CaseStudies";
+import TechStack from "@/components/TechStack";
+import Industries from "@/components/Industries";
+import Testimonials from "@/components/Testimonials";
+import TrustMarquee from "@/components/TrustMarquee";
+import FAQ from "@/components/FAQ";
+import Contact from "@/components/Contact";
+import FinalCTA from "@/components/FinalCTA";
+import Footer from "@/components/Footer";
+import Preloader from "@/components/Preloader";
+import dynamic from "next/dynamic";
+
+const Agentation = dynamic(
+  () => import("agentation").then((mod) => mod.Agentation),
+  { ssr: false }
+);
 
 export default function Home() {
+  const [isRevealed, setIsRevealed] = useState(false);
+
+  // Cursor follow & Scroll Reveal systems
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      document.documentElement.style.setProperty("--mouse-x", `${e.clientX}px`);
+      document.documentElement.style.setProperty("--mouse-y", `${e.clientY}px`);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    // Intersection Observer for scroll fades, blurs, and masks
+    const reveals = document.querySelectorAll(".reveal-fade-up, .blur-reveal, .image-mask-reveal");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            // Optional: unobserve once visible
+            // observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px" // Trigger slightly before entering view
+      }
+    );
+
+    reveals.forEach((el) => observer.observe(el));
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      observer.disconnect();
+    };
+  }, []);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <>
+      <Preloader onComplete={() => setIsRevealed(true)} />
+      {/* Background aesthetics */}
+      <div className="grid-backdrop"></div>
+      <div className="glow-canvas"></div>
+
+      {/* Main portal layout */}
+      <Navbar />
+
+      <main>
+        {/* Section 1: Hero Banner */}
+        <Hero revealed={isRevealed} />
+
+        {/* Section 1.5: Interactive Business Ecosystem */}
+        <BusinessEcosystem />
+
+        {/* Section 1.6: AI-Powered Website Intelligence */}
+        <WebsiteIntelligence />
+
+        {/* Section 1.7: Avhad BuildFlow Studio */}
+        <BuildFlow />
+
+        {/* Section 2: Logo Ticker */}
+        <LogoMarquee />
+
+        {/* Section 3: Strategic Metrics */}
+        <Metrics />
+
+        {/* Section 4: About & Philosophy */}
+        <About />
+
+        {/* Section 5: Why Choose Us */}
+        <WhyChooseUs />
+
+        {/* Section 6: Expertise Grid */}
+        <Expertise />
+
+        {/* Section 7: Pain-Solution gaps */}
+        <Challenges />
+
+        {/* Section 8: Process Timeline */}
+        <ProcessTimeline />
+
+        {/* Section 9: Featured Case Studies */}
+        <CaseStudies />
+
+        {/* Section 10: Tech Stack Flip Grid */}
+        <TechStack />
+
+        {/* Section 11: Industries Matrix */}
+        <Industries />
+
+        {/* Section 12: Executive Testimonials */}
+        <Testimonials />
+
+        {/* Section 13: Trust Certifications marquee */}
+        <TrustMarquee />
+
+        {/* Section 14: Accoridion FAQs */}
+        <FAQ />
+
+        {/* Section 15: Strategic Inquiry Form */}
+        <Contact />
+
+        {/* Section 16: Centered Glow CTA */}
+        <FinalCTA />
       </main>
-    </div>
+
+      {/* Section 17: Comprehensive Footer */}
+      <Footer />
+
+      {process.env.NODE_ENV === "development" && <Agentation />}
+    </>
   );
 }
