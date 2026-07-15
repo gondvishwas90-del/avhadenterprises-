@@ -1072,6 +1072,7 @@ section {
 .expertise-card-title {
   font-size: 1.35rem;
   margin-bottom: 1rem;
+  color: var(--text-primary);
 }
 
 .expertise-card-desc {
@@ -1127,10 +1128,15 @@ section {
 .expertise-card.expanded .expertise-card-desc {
   -webkit-line-clamp: 5;
   line-clamp: 5;
+  color: var(--text-primary);
+}
+
+.expertise-card.expanded .expertise-bullets li {
+  color: var(--text-primary);
 }
 
 .expertise-card.shrunk {
-  opacity: 0.5;
+  opacity: 1;
 }
 
 @media (max-width: 1200px) {
@@ -6054,7 +6060,15 @@ section {
   transform: translateY(-1px);
 }
 
+/* Fix clipping and dark shadow artifacts behind magnetic buttons */
+.flex > .overflow-hidden > .inline-flex {
+  overflow: visible !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
 
-
-
-
+.magnetic, [class*="magnetic"] {
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}

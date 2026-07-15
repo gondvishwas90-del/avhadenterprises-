@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import BusinessEcosystem from "@/components/BusinessEcosystem";
-import WebsiteIntelligence from "@/components/WebsiteIntelligence";
 import BuildFlow from "@/components/BuildFlow";
 import LogoMarquee from "@/components/LogoMarquee";
 import Metrics from "@/components/Metrics";
@@ -85,9 +84,6 @@ export default function Home() {
 
         {/* Section 1.5: Interactive Business Ecosystem */}
         <BusinessEcosystem />
-
-        {/* Section 1.6: AI-Powered Website Intelligence */}
-        <WebsiteIntelligence />
 
         {/* Section 1.7: Avhad BuildFlow Studio */}
         <BuildFlow />
