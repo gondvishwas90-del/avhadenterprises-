@@ -3,10 +3,14 @@
 import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import BusinessEcosystem from "@/components/BusinessEcosystem";
-import BuildFlow from "@/components/BuildFlow";
+import ServicesShowcase from "@/components/ServicesShowcase";
+import AgenticShowcase from "@/components/AgenticShowcase";
+import BusinessBankingSection from "@/components/BusinessBankingSection";
+import D2CShowcaseSection from "@/components/D2CShowcaseSection";
+import StudioTechSection from "@/components/StudioTechSection";
 import LogoMarquee from "@/components/LogoMarquee";
 import Metrics from "@/components/Metrics";
+import StrategicShowcase from "@/components/StrategicShowcase";
 import About from "@/components/About";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import Expertise from "@/components/Expertise";
@@ -82,17 +86,29 @@ export default function Home() {
         {/* Section 1: Hero Banner */}
         <Hero revealed={isRevealed} />
 
-        {/* Section 1.5: Interactive Business Ecosystem */}
-        <BusinessEcosystem />
+        {/* Section 1.5: Nudot-inspired Services Showcase */}
+        <ServicesShowcase />
 
-        {/* Section 1.7: Avhad BuildFlow Studio */}
-        <BuildFlow />
+        {/* Section 1.6: Razorpay-inspired Agentic Showcase */}
+        <AgenticShowcase />
+
+        {/* Section 1.6.5: StudioTech Globe Section */}
+        <StudioTechSection />
+
+        {/* Section 1.6.2: Razorpay-inspired Business Banking */}
+        <BusinessBankingSection />
+
+        {/* Section 1.6.3: Razorpay-inspired D2C Showcase */}
+        <D2CShowcaseSection />
 
         {/* Section 2: Logo Ticker */}
         <LogoMarquee />
 
         {/* Section 3: Strategic Metrics */}
         <Metrics />
+
+        {/* Section 3.5: Strategic Wave Showcase */}
+        <StrategicShowcase />
 
         {/* Section 4: About & Philosophy */}
         <About />

@@ -112,11 +112,11 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     }
 
     const warpDistance = 1500;
-    
+
     // Quintic Hermite ease-in-ease-out curve
     const quinticEase = (t: number) => {
-      return t < 0.5 
-        ? 16 * Math.pow(t, 5) 
+      return t < 0.5
+        ? 16 * Math.pow(t, 5)
         : 1 - 16 * Math.pow(1 - t, 5);
     };
 
@@ -152,7 +152,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       // Progress t (0 to 1) driven automatically by elapsed time
       transitionTime += deltaTime;
       const t = Math.min(transitionTime / transitionDuration, 1);
-      
+
       let cameraZ = 0;
       let fadeIn = 1;
       let tunnelOpacity = 1;
@@ -162,7 +162,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       if (t < 0.2) {
         cameraZ = 0;
         fadeIn = t / 0.2;
-      } 
+      }
       // 20% to 100%: Forward movement & acceleration begins
       else {
         const tPrime = (t - 0.2) / 0.8; // Map [0.2, 1] to [0, 1]
@@ -219,10 +219,10 @@ export default function Preloader({ onComplete }: PreloaderProps) {
 
         // Fades out naturally into the vanishing point (depthRatio)
         const depthRatio = 1 - relZ / maxZ;
-        
+
         // Nearest lines opacity: 100%, Far opacity: 20%
         const opacity = 0.2 + 0.8 * depthRatio;
-        
+
         // Line Style: Nearest stroke: 2px, Middle: 1.5px, Far: 1px, Deep: 0.75px
         ctx.lineWidth = 0.75 + 1.25 * scale;
 
@@ -233,7 +233,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
 
         // Clean white stroke color #FFFFFF
         ctx.strokeStyle = `rgba(255, 255, 255, ${opacity * closeFade * tunnelOpacity * fadeIn})`;
-        
+
         // Draw top and bottom horizontal lines (each rotated by -6 degrees)
         ctx.beginPath();
         ctx.moveTo(sx, sy);

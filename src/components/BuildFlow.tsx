@@ -59,7 +59,7 @@ export default function BuildFlow() {
   const [activeAccordion, setActiveAccordion] = useState<number | null>(0);
   const [sliderIndex, setSliderIndex] = useState(0);
   const [videoPlaying, setVideoPlaying] = useState(false);
-  
+
   // Form states
   const [emailInput, setEmailInput] = useState("");
   const [msgInput, setMsgInput] = useState("");
@@ -310,18 +310,18 @@ export default function BuildFlow() {
 
   // Determine if studio headers/footers/reset layers should show based on state
   const isFinalStates = dragState === "live_prototype";
-  const isTransitioning = 
-    dragState === "compiling" || 
-    dragState === "blueprint" || 
-    dragState === "building_3d" || 
+  const isTransitioning =
+    dragState === "compiling" ||
+    dragState === "blueprint" ||
+    dragState === "building_3d" ||
     dragState === "camera_transition";
 
   return (
     <section id="buildflow" className="buildflow-section">
       <div className="ambient-glow-1"></div>
-      
+
       <div className="buildflow-container">
-        
+
         {/* Full Header only visible if studio isn't fully transformed into live_prototype */}
         {!isFinalStates && (
           <div style={{ marginBottom: "3rem" }}>
@@ -332,8 +332,8 @@ export default function BuildFlow() {
               Avhad BuildFlow
             </h2>
             <p className="buildflow-desc" style={{ marginTop: "1rem", marginBottom: 0 }}>
-              Watch your website pass through Avhad's automated orchestration studio. 
-              Experience our integrated workflow pipeline aligning strategy, design system alignment, 
+              Watch your website pass through Avhad's automated orchestration studio.
+              Experience our integrated workflow pipeline aligning strategy, design system alignment,
               deep search engine preparation, and marketing automation in real time.
             </p>
           </div>
@@ -341,7 +341,7 @@ export default function BuildFlow() {
 
         {/* 3D Perspective Shell Wrapper */}
         <div className="buildflow-workspace-wrapper">
-          
+
           {/* Header/Footer Tags that stay overlaying when Live browser appears */}
           {isFinalStates && (
             <>
@@ -361,9 +361,8 @@ export default function BuildFlow() {
 
           {/* Core Studio Mockup Window */}
           <div
-            className={`buildflow-workspace-card ${
-              dragState === "camera_transition" || dragState === "building_3d" ? "tilt-active" : ""
-            }`}
+            className={`buildflow-workspace-card ${dragState === "camera_transition" || dragState === "building_3d" ? "tilt-active" : ""
+              }`}
             style={{
               width: "100%",
               maxWidth: isFinalStates ? "960px" : "880px",
@@ -371,7 +370,7 @@ export default function BuildFlow() {
               transition: "max-width 1s ease, height 1s ease, transform 1.8s ease"
             }}
           >
-            
+
             {/* Window header buttons panel (hidden when website is fully loaded) */}
             {!isFinalStates && (
               <div className="buildflow-window-header">
@@ -395,11 +394,11 @@ export default function BuildFlow() {
             )}
 
             {/* Render different stages based on State Machine */}
-            
+
             {/* 1. standard Onboarding Grid (Before compiling) */}
             {!isTransitioning && !isFinalStates && dragState !== "delivered" && (
               <div className="buildflow-workspace-body">
-                
+
                 {/* Left side checklist status panel */}
                 <div className="buildflow-side-dashboard">
                   <div className="buildflow-dashboard-header">
@@ -412,7 +411,7 @@ export default function BuildFlow() {
                       {dragState === "pipeline_teams" && "Collaborating"}
                       {dragState === "assembly" && "Assembly Stage"}
                     </span>
-                    
+
                     <h3 className="buildflow-dashboard-title">
                       {dragState === "idle" && "Build Studio Active"}
                       {dragState === "dropped" && "Importing website..."}
@@ -452,13 +451,12 @@ export default function BuildFlow() {
                           return (
                             <div
                               key={name}
-                              className={`buildflow-pipeline-item ${
-                                itemStatus === "completed"
+                              className={`buildflow-pipeline-item ${itemStatus === "completed"
                                   ? "completed"
                                   : itemStatus === "active"
-                                  ? "active"
-                                  : "waiting"
-                              }`}
+                                    ? "active"
+                                    : "waiting"
+                                }`}
                             >
                               <span className="buildflow-status-dot">
                                 {getStatusIcon(itemStatus)}
@@ -493,13 +491,12 @@ export default function BuildFlow() {
                           return (
                             <div
                               key={name}
-                              className={`buildflow-pipeline-item ${
-                                itemStatus === "completed"
+                              className={`buildflow-pipeline-item ${itemStatus === "completed"
                                   ? "completed"
                                   : itemStatus === "active"
-                                  ? "active"
-                                  : "waiting"
-                              }`}
+                                    ? "active"
+                                    : "waiting"
+                                }`}
                             >
                               <span className="buildflow-status-dot">
                                 {getStatusIcon(itemStatus)}
@@ -535,13 +532,12 @@ export default function BuildFlow() {
                           return (
                             <div
                               key={name}
-                              className={`buildflow-pipeline-item ${
-                                itemStatus === "completed"
+                              className={`buildflow-pipeline-item ${itemStatus === "completed"
                                   ? "completed"
                                   : itemStatus === "active"
-                                  ? "active"
-                                  : "waiting"
-                              }`}
+                                    ? "active"
+                                    : "waiting"
+                                }`}
                             >
                               <span className="buildflow-status-dot">
                                 {getStatusIcon(itemStatus)}
@@ -584,7 +580,7 @@ export default function BuildFlow() {
 
                 {/* Right side workspaces panel */}
                 <div className="buildflow-studio-workspace">
-                  
+
                   {dragState === "idle" && (
                     <div
                       className={`buildflow-drop-zone ${isDragOver ? "dragover" : ""}`}
@@ -596,7 +592,7 @@ export default function BuildFlow() {
                       <span className="buildflow-dropzone-text">
                         Drag & Drop Website Here
                       </span>
-                      
+
                       {/* Clicking input fallback form */}
                       <form onSubmit={handleFormSubmit} onClick={(e) => e.stopPropagation()} className="buildflow-url-input-container">
                         <input
@@ -713,7 +709,7 @@ export default function BuildFlow() {
                   <Award size={14} />
                   <span>Orchestration Complete</span>
                 </div>
-                
+
                 <h3 className="buildflow-delivery-title">
                   Digital Transformation Complete
                 </h3>
@@ -821,7 +817,7 @@ export default function BuildFlow() {
             {/* 7. Fully Interactive Browser Mockup (Stage 4 / Final Reveal) */}
             {dragState === "live_prototype" && (
               <div className="buildflow-live-browser">
-                
+
                 {/* Browser Header Bar */}
                 <div className="buildflow-browser-header">
                   <div className="buildflow-window-dots">
@@ -829,12 +825,12 @@ export default function BuildFlow() {
                     <span className="buildflow-dot yellow" style={{ width: 8, height: 8 }}></span>
                     <span className="buildflow-dot green" style={{ width: 8, height: 8 }}></span>
                   </div>
-                  
+
                   <div className="buildflow-browser-address-bar">
                     <Lock size={10} style={{ color: "#10b981" }} />
                     <span>https://{websiteUrl}/live-prototype</span>
                   </div>
-                  
+
                   <div style={{ display: "flex", gap: "0.4rem" }}>
                     <span style={{ fontSize: "0.65rem", padding: "0.1rem 0.4rem", background: "rgba(16, 185, 129, 0.15)", borderRadius: "4px", color: "#10b981", fontWeight: 800 }}>
                       ACTIVE
@@ -850,7 +846,7 @@ export default function BuildFlow() {
                   onMouseEnter={() => setIsMouseInside(true)}
                   onMouseLeave={() => setIsMouseInside(false)}
                 >
-                  
+
                   {/* Local Mouse lighting and custom cursor */}
                   {isMouseInside && (
                     <>
@@ -861,7 +857,7 @@ export default function BuildFlow() {
 
                   {/* Actual Mock Website Body */}
                   <div className="mock-web-body">
-                    
+
                     {/* Simulated Navbar */}
                     <header className="mock-web-nav">
                       <div className="mock-web-logo">
@@ -911,23 +907,23 @@ export default function BuildFlow() {
                           Core Experience
                         </button>
                       </div>
-                      
+
                       <div className="mock-web-tab-content">
                         {activeTab === "strategy" && (
                           <p>
-                            We analyze competitors and design bespoke routes mapping to your growth KPIs. 
+                            We analyze competitors and design bespoke routes mapping to your growth KPIs.
                             Our systems align operational resources to increase lead pipeline flow by up to **42%**.
                           </p>
                         )}
                         {activeTab === "tech" && (
                           <p>
-                            High-performance React/Next.js routes, serverless background hooks, 
+                            High-performance React/Next.js routes, serverless background hooks,
                             optimized edge CDN endpoints, and database connection pools that reduce latency down to **0.8s**.
                           </p>
                         )}
                         {activeTab === "design" && (
                           <p>
-                            Bespoke glassmorphic components, fluid mouse movement responses, 
+                            Bespoke glassmorphic components, fluid mouse movement responses,
                             magnetic button loops, and precise typography spacing delivering an award-winning first impression.
                           </p>
                         )}
@@ -959,7 +955,7 @@ export default function BuildFlow() {
                       <h4 className="mock-web-section-title">Telemetry Index</h4>
                       <div className="mock-web-slider-wrapper">
                         <div className="mock-web-slider-track" style={{ transform: `translateX(-${sliderIndex * 100}%)` }}>
-                          
+
                           <div className="mock-web-slide">
                             <span className="mock-web-slide-value">+84.6%</span>
                             <span className="mock-web-slide-label">Conversion Rate Boost</span>
@@ -979,7 +975,7 @@ export default function BuildFlow() {
                           </div>
 
                         </div>
-                        
+
                         <div className="mock-web-slider-dots">
                           {[0, 1, 2].map((idx) => (
                             <span
@@ -996,7 +992,7 @@ export default function BuildFlow() {
                     <div className="mock-web-accordion-section">
                       <h4 className="mock-web-section-title">Orchestration FAQs</h4>
                       <div className="mock-web-accordion">
-                        
+
                         {[
                           { q: "Is the CRM connection secure?", a: "Yes, every pipeline includes standard SSL headers and token authentication schemas." },
                           { q: "Does layout support mobile?", a: "Fully responsive layouts built with flexible grids adapt instantly to any size screen." },
