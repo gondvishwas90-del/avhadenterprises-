@@ -71,6 +71,7 @@ export default function AgenticShowcase() {
           autoplay: true,
           stateMachines: "State Machine 1",
           artboard: "Artboard",
+          useOffscreenRenderer: true,
           layout: new (window as any).rive.Layout({
             fit: (window as any).rive.Fit.Contain,
             alignment: (window as any).rive.Alignment.Center

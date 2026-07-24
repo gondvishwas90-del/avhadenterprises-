@@ -85,6 +85,7 @@ export default function D2CShowcaseSection() {
             autoplay: true,
             stateMachines: "State Machine 1",
             artboard: card.artboard,
+            useOffscreenRenderer: true,
             layout: new (window as any).rive.Layout({
               fit: (window as any).rive.Fit.Contain,
               alignment: (window as any).rive.Alignment.Center

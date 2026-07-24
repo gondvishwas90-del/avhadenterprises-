@@ -3,14 +3,14 @@
 import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import ServicesShowcase from "@/components/ServicesShowcase";
+import RedesignExperience from "@/components/RedesignExperience";
 import AgenticShowcase from "@/components/AgenticShowcase";
-import BusinessBankingSection from "@/components/BusinessBankingSection";
+import OperationsAutomation from "@/components/OperationsAutomation";
 import D2CShowcaseSection from "@/components/D2CShowcaseSection";
+import GrowthShowcase from "@/components/GrowthShowcase";
 import StudioTechSection from "@/components/StudioTechSection";
 import LogoMarquee from "@/components/LogoMarquee";
 import Metrics from "@/components/Metrics";
-import StrategicShowcase from "@/components/StrategicShowcase";
 import About from "@/components/About";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import Expertise from "@/components/Expertise";
@@ -86,8 +86,8 @@ export default function Home() {
         {/* Section 1: Hero Banner */}
         <Hero revealed={isRevealed} />
 
-        {/* Section 1.5: Nudot-inspired Services Showcase */}
-        <ServicesShowcase />
+        {/* Section 1.3: Razorpay-inspired Premium Redesign Experience */}
+        <RedesignExperience />
 
         {/* Section 1.6: Razorpay-inspired Agentic Showcase */}
         <AgenticShowcase />
@@ -95,20 +95,20 @@ export default function Home() {
         {/* Section 1.6.5: StudioTech Globe Section */}
         <StudioTechSection />
 
-        {/* Section 1.6.2: Razorpay-inspired Business Banking */}
-        <BusinessBankingSection />
+        {/* Section 1.6.2: Workflow Automation Showcase */}
+        <OperationsAutomation />
 
         {/* Section 1.6.3: Razorpay-inspired D2C Showcase */}
         <D2CShowcaseSection />
+
+        {/* Section 1.6.4: Razorpay-inspired Growth Showcase */}
+        <GrowthShowcase />
 
         {/* Section 2: Logo Ticker */}
         <LogoMarquee />
 
         {/* Section 3: Strategic Metrics */}
         <Metrics />
-
-        {/* Section 3.5: Strategic Wave Showcase */}
-        <StrategicShowcase />
 
         {/* Section 4: About & Philosophy */}
         <About />
