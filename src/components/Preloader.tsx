@@ -11,13 +11,14 @@ export interface Rectangle3D {
 }
 
 export default function Preloader({ onComplete }: PreloaderProps) {
-  const [progress, setProgress] = useState(0);
   const [isWarping, setIsWarping] = useState(false);
   const [isFadeOut, setIsFadeOut] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const progressRef = useRef(0);
+  const curtainRef = useRef<SVGPathElement>(null);
+  const progressFillRef = useRef<HTMLDivElement>(null);
+
   const animationFrameRef = useRef<number | null>(null);
   const isWarpingRef = useRef(false);
   const isFadeOutRef = useRef(false);
@@ -27,29 +28,6 @@ export default function Preloader({ onComplete }: PreloaderProps) {
   useEffect(() => {
     onCompleteRef.current = onComplete;
   }, [onComplete]);
-
-  // Sync state ref for animation thread access
-  useEffect(() => {
-    progressRef.current = progress;
-  }, [progress]);
-
-  // Loading progress generator (3 seconds duration)
-  useEffect(() => {
-    const startTime = Date.now();
-    const duration = 3000;
-
-    const interval = setInterval(() => {
-      const elapsed = Date.now() - startTime;
-      const computedProgress = Math.min((elapsed / duration) * 100, 100);
-      setProgress(Math.floor(computedProgress));
-
-      if (computedProgress >= 100) {
-        clearInterval(interval);
-      }
-    }, 20);
-
-    return () => clearInterval(interval);
-  }, []);
 
   // Lock background scroll during loading and warping phases
   useEffect(() => {
@@ -121,8 +99,73 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     };
 
     let lastTime = performance.now();
+    let loopStartTime = performance.now();
     let transitionTime = 0;
     const transitionDuration = 3000; // 3.0 seconds automatic transition duration
+
+    // Liquid Curtain exit morphing parameters
+    let curtainStartTime = 0;
+    const curtainDuration = 850;
+
+    const animateCurtain = (timestamp: number) => {
+      if (!curtainStartTime) curtainStartTime = timestamp;
+      const elapsed = timestamp - curtainStartTime;
+      const progressT = Math.min(elapsed / curtainDuration, 1);
+
+      // Cubic ease-in-out curve
+      const easeT =
+        progressT < 0.5
+          ? 4 * progressT * progressT * progressT
+          : 1 - Math.pow(-2 * progressT + 2, 3) / 2;
+
+      const yCorners = 100 * (1 - easeT);
+      // Center lags behind corners to create downward bulge
+      const lag = 25 * Math.sin(progressT * Math.PI);
+      const yCenter = Math.min(100, 100 * (1 - easeT) + lag);
+
+      if (curtainRef.current) {
+        curtainRef.current.setAttribute(
+          "d",
+          `M 0 0 L 100 0 L 100 ${yCorners} Q 50 ${yCenter} 0 ${yCorners} Z`
+        );
+      }
+
+      if (progressT < 1) {
+        requestAnimationFrame(animateCurtain);
+      } else {
+        setIsHidden(true);
+        window.scrollTo(0, 0);
+        onCompleteRef.current();
+      }
+    };
+
+    // Isolated Progress Loading Loop
+    let loadingStartTime = performance.now();
+    const loadingDuration = 3000;
+
+    const animateLoading = (timestamp: number) => {
+      const elapsed = timestamp - loadingStartTime;
+      const progressPercent = Math.min((elapsed / loadingDuration) * 100, 100);
+
+      // Update HUD elements directly in DOM
+      if (progressFillRef.current) {
+        progressFillRef.current.style.width = `${progressPercent}%`;
+      }
+
+
+      if (progressPercent < 100) {
+        animationFrameRef.current = requestAnimationFrame(animateLoading);
+      } else {
+        // loading complete: trigger HUD fade-out state
+        setIsWarping(true);
+        isWarpingRef.current = true;
+
+        // Initialize and trigger canvas rendering loop
+        loopStartTime = performance.now();
+        lastTime = performance.now();
+        animationFrameRef.current = requestAnimationFrame(loop);
+      }
+    };
 
     const loop = () => {
       const time = performance.now();
@@ -135,23 +178,13 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       const cx = w / 2;
       const cy = h / 2;
 
-      // Draw pure black background (#000000)
+      // Draw background
       ctx.fillStyle = "#000000";
       ctx.fillRect(0, 0, w, h);
 
-      if (progressRef.current < 100) {
-        animationFrameRef.current = requestAnimationFrame(loop);
-        return;
-      }
-
-      if (!isWarpingRef.current) {
-        isWarpingRef.current = true;
-        setIsWarping(true);
-      }
-
       // Progress t (0 to 1) driven automatically by elapsed time
-      transitionTime += deltaTime;
-      const t = Math.min(transitionTime / transitionDuration, 1);
+      const elapsedWarp = time - loopStartTime;
+      const t = Math.min(elapsedWarp / transitionDuration, 1);
 
       let cameraZ = 0;
       let fadeIn = 1;
@@ -165,7 +198,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       }
       // 20% to 100%: Forward movement & acceleration begins
       else {
-        const tPrime = (t - 0.2) / 0.8; // Map [0.2, 1] to [0, 1]
+        const tPrime = (t - 0.2) / 0.8;
         const easeFactor = quinticEase(tPrime);
         cameraZ = easeFactor * warpDistance;
         fadeIn = 1;
@@ -174,32 +207,24 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       // 90% to 100%: Tunnel dissolves and expands (opens up) into Hero background
       if (t >= 0.9) {
         tunnelOpacity = 1 - (t - 0.9) / 0.1;
-        const expandFactor = (t - 0.9) / 0.1; // 0 to 1
-        scaleMultiplier = 1.0 + Math.pow(expandFactor, 3) * 6; // Exponential expansion
+        const expandFactor = (t - 0.9) / 0.1;
+        scaleMultiplier = 1.0 + Math.pow(expandFactor, 3) * 6;
       }
 
       // Complete transition
       if (t >= 1 && !isFadeOutRef.current) {
         isFadeOutRef.current = true;
         setIsFadeOut(true);
-        setTimeout(() => {
-          setIsHidden(true);
-          window.scrollTo(0, 0); // Force scroll position to the very top (Hero section)
-          onCompleteRef.current();
-        }, 800);
+        // Start high-performance liquid curtain sweep reveal
+        requestAnimationFrame(animateCurtain);
         return;
       }
 
-      // Focal length of 100 creates the exact perspective scale (nearest width 800px, vanishing width 40px)
+      // Focal length of 100 creates perspective scale
       const focalLength = 100;
 
-      // Apply static global rotation of exactly -6 degrees around screen center
-      ctx.save();
-      ctx.translate(cx, cy);
-      ctx.rotate(-6 * Math.PI / 180);
-      ctx.translate(-cx, -cy);
 
-      // Clean vector styles, no blur/bloom shadows
+
       ctx.shadowBlur = 0;
       ctx.shadowColor = "transparent";
 
@@ -217,13 +242,10 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         const sx = cx - sw / 2;
         const sy = cy - sh / 2;
 
-        // Fades out naturally into the vanishing point (depthRatio)
         const depthRatio = 1 - relZ / maxZ;
-
-        // Nearest lines opacity: 100%, Far opacity: 20%
         const opacity = 0.2 + 0.8 * depthRatio;
 
-        // Line Style: Nearest stroke: 2px, Middle: 1.5px, Far: 1px, Deep: 0.75px
+        // Original lines style: Nearest stroke: 2px, Middle: 1.5px, Far: 1px, Deep: 0.75px
         ctx.lineWidth = 0.75 + 1.25 * scale;
 
         let closeFade = 1;
@@ -234,7 +256,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         // Clean white stroke color #FFFFFF
         ctx.strokeStyle = `rgba(255, 255, 255, ${opacity * closeFade * tunnelOpacity * fadeIn})`;
 
-        // Draw top and bottom horizontal lines (each rotated by -6 degrees)
+        // Draw horizontal lines
         ctx.beginPath();
         ctx.moveTo(sx, sy);
         ctx.lineTo(sx + sw, sy);
@@ -243,12 +265,13 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         ctx.stroke();
       }
 
-      ctx.restore(); // Restore context to default (no rotation) for subsequent rendering
+
 
       animationFrameRef.current = requestAnimationFrame(loop);
     };
 
-    animationFrameRef.current = requestAnimationFrame(loop);
+    // Trigger isolated loading animation
+    animationFrameRef.current = requestAnimationFrame(animateLoading);
 
     return () => {
       window.removeEventListener("resize", resizeCanvas);
@@ -261,56 +284,42 @@ export default function Preloader({ onComplete }: PreloaderProps) {
   if (isHidden) return null;
 
   return (
-    <div className={`preloader-overlay ${isFadeOut ? "preloader-fade-out" : ""}`}>
+    <div className="preloader-overlay">
+      {/* SVG Liquid Curtain Overlay */}
+      <svg className="preloader-curtain" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path ref={curtainRef} fill="#000000" d="M 0 0 L 100 0 L 100 100 Q 50 100 0 100 Z" />
+      </svg>
+
       <canvas ref={canvasRef} className="preloader-tunnel-canvas" />
       <div className="editorial-noise-overlay"></div>
 
       {/* Loading HUD */}
       <div className={`preloader-hud ${isWarping ? "hud-fade-out" : ""}`}>
         <div className="preloader-content">
-          <div className="preloader-logo-svg">
-            <svg width="220" height="220" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M 42 135 A 80 80 0 1 1 158 135" fill="none" stroke="#00e5ff" strokeWidth="2.2" />
-              <circle cx="42" cy="135" r="4.5" fill="#00e5ff" />
-              <circle cx="158" cy="135" r="4.5" fill="#00e5ff" />
-
-              <polygon points="35,85 92,50 92,60 52,85" fill="white" />
-              <line x1="50" y1="85" x2="82" y2="70" stroke="#00e5ff" strokeWidth="3.5" strokeLinecap="round" />
-              <circle cx="82" cy="70" r="4.5" fill="#00e5ff" />
-              <polygon points="35,85 60,85 92,68 92,120" fill="white" />
-
-              <rect x="108" y="50" width="12" height="70" fill="white" />
-              <polygon points="120,50 165,50 142,72 120,72" fill="white" />
-              <path d="M 120,75 L 145,75 L 167,85 L 145,95 L 120,95 L 120,89 L 140,89 L 140,81 L 120,81 Z" fill="white" />
-              <line x1="120" y1="85" x2="136" y2="85" stroke="#00e5ff" strokeWidth="3.5" strokeLinecap="round" />
-              <circle cx="136" cy="85" r="4.5" fill="#00e5ff" />
-              <polygon points="120,120 165,120 142,98 120,98" fill="white" />
-
-              <text
-                x="100"
-                y="170"
-                fill="#ffffff"
-                fontSize="12.5"
-                fontFamily="var(--font-family-sans)"
-                fontWeight="900"
-                letterSpacing="0.14em"
-                textAnchor="middle"
+          <div className="preloader-title-wrap">
+            {"AVHAD ENTERPRISES".split("").map((char, index) => (
+              <span
+                key={index}
+                className="preloader-title-letter"
+                style={{
+                  animationDelay: `${index * 0.04}s`,
+                  marginRight: char === " " ? "0.22em" : "0",
+                }}
               >
-                AVHAD ENTERPRISES
-              </text>
-            </svg>
+                {char === " " ? "\u00A0" : char}
+              </span>
+            ))}
           </div>
 
           <div className="preloader-progress-bg">
             <div
+              ref={progressFillRef}
               className="preloader-progress-fill"
-              style={{ width: `${progress}%` }}
+              style={{ width: "0%" }}
             ></div>
           </div>
 
-          <div className="preloader-status-text">
-            <span>{progress}%</span> Loaded
-          </div>
+
         </div>
       </div>
     </div>

@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter, Playfair_Display, Alegreya_Sans, Geist } from "next/font/google";
 import "./globals.css";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const inter = Inter({
   subsets: ["latin"],
@@ -13,6 +16,14 @@ const playfair = Playfair_Display({
   variable: "--font-playfair",
   style: ["italic"],
   weight: ["400", "700"],
+  display: "swap",
+});
+
+const alegreyaSans = Alegreya_Sans({
+  subsets: ["latin"],
+  variable: "--font-alegreya-sans",
+  weight: ["100", "300", "400", "500", "700", "800", "900"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -35,7 +46,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+    <html lang="en" className={cn(inter.variable, playfair.variable, alegreyaSans.variable, "font-sans", geist.variable)}>
       <body>
         {children}
       </body>

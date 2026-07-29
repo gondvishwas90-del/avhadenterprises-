@@ -102,6 +102,69 @@ export default function D2CShowcaseSection() {
       });
     };
 
+    const handleContextLost = (event: Event) => {
+      event.preventDefault();
+      const targetCanvas = event.target as HTMLCanvasElement;
+      const cardId = cardItems.find(card => card.canvasId === targetCanvas.id)?.id;
+      console.warn(`WebGL context lost on D2C canvas: ${targetCanvas.id}`);
+      if (cardId && RiveInstancesRef.current[cardId]) {
+        try {
+          RiveInstancesRef.current[cardId].cleanup();
+        } catch (e) {}
+        delete RiveInstancesRef.current[cardId];
+      }
+    };
+
+    const handleContextRestored = (event: Event) => {
+      const targetCanvas = event.target as HTMLCanvasElement;
+      const card = cardItems.find(c => c.canvasId === targetCanvas.id);
+      if (card) {
+        console.log(`WebGL context restored on D2C canvas: ${targetCanvas.id}. Re-initializing...`);
+        const canvas = targetCanvas;
+        if (RiveInstancesRef.current[card.id]) {
+          try {
+            RiveInstancesRef.current[card.id].cleanup();
+          } catch (e) {}
+          delete RiveInstancesRef.current[card.id];
+        }
+
+        const rect = canvas.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio, 2);
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+
+        try {
+          RiveInstancesRef.current[card.id] = new (window as any).rive.Rive({
+            src: card.riveUrl,
+            canvas: canvas,
+            autoplay: true,
+            stateMachines: "State Machine 1",
+            artboard: card.artboard,
+            useOffscreenRenderer: true,
+            layout: new (window as any).rive.Layout({
+              fit: (window as any).rive.Fit.Contain,
+              alignment: (window as any).rive.Alignment.Center
+            }),
+            onLoad: () => {
+              try {
+                RiveInstancesRef.current[card.id].resizeDrawingSurfaceToCanvas();
+              } catch (e) {}
+            }
+          });
+        } catch (err) {
+          console.error(`Rive Canvas load error for ${card.id}:`, err);
+        }
+      }
+    };
+
+    cardItems.forEach((card) => {
+      const canvas = document.getElementById(card.canvasId);
+      if (canvas) {
+        canvas.addEventListener("webglcontextlost", handleContextLost);
+        canvas.addEventListener("webglcontextrestored", handleContextRestored);
+      }
+    });
+
     loadRiveScript(() => {
       initAllRive();
     });
@@ -127,6 +190,11 @@ export default function D2CShowcaseSection() {
     return () => {
       window.removeEventListener("resize", handleResize);
       cardItems.forEach((card) => {
+        const canvas = document.getElementById(card.canvasId);
+        if (canvas) {
+          canvas.removeEventListener("webglcontextlost", handleContextLost);
+          canvas.removeEventListener("webglcontextrestored", handleContextRestored);
+        }
         if (RiveInstancesRef.current[card.id]) {
           try {
             RiveInstancesRef.current[card.id].cleanup();

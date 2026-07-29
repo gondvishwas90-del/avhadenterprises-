@@ -3,10 +3,6 @@
 import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import RedesignExperience from "@/components/RedesignExperience";
-import AgenticShowcase from "@/components/AgenticShowcase";
-import OperationsAutomation from "@/components/OperationsAutomation";
-import D2CShowcaseSection from "@/components/D2CShowcaseSection";
 import GrowthShowcase from "@/components/GrowthShowcase";
 import StudioTechSection from "@/components/StudioTechSection";
 import LogoMarquee from "@/components/LogoMarquee";
@@ -16,7 +12,6 @@ import WhyChooseUs from "@/components/WhyChooseUs";
 import Expertise from "@/components/Expertise";
 import Challenges from "@/components/Challenges";
 import ProcessTimeline from "@/components/ProcessTimeline";
-import CaseStudies from "@/components/CaseStudies";
 import TechStack from "@/components/TechStack";
 import Industries from "@/components/Industries";
 import Testimonials from "@/components/Testimonials";
@@ -30,6 +25,11 @@ import dynamic from "next/dynamic";
 
 const Agentation = dynamic(
   () => import("agentation").then((mod) => mod.Agentation),
+  { ssr: false }
+);
+
+const EcommerceFulfillmentSection = dynamic(
+  () => import("@/components/EcommerceFulfillmentSection"),
   { ssr: false }
 );
 
@@ -86,20 +86,13 @@ export default function Home() {
         {/* Section 1: Hero Banner */}
         <Hero revealed={isRevealed} />
 
-        {/* Section 1.3: Razorpay-inspired Premium Redesign Experience */}
-        <RedesignExperience />
 
-        {/* Section 1.6: Razorpay-inspired Agentic Showcase */}
-        <AgenticShowcase />
+
+        {/* Section 1.6.1: Premium 3D E-Commerce Fulfillment Cockpit */}
+        <EcommerceFulfillmentSection />
 
         {/* Section 1.6.5: StudioTech Globe Section */}
         <StudioTechSection />
-
-        {/* Section 1.6.2: Workflow Automation Showcase */}
-        <OperationsAutomation />
-
-        {/* Section 1.6.3: Razorpay-inspired D2C Showcase */}
-        <D2CShowcaseSection />
 
         {/* Section 1.6.4: Razorpay-inspired Growth Showcase */}
         <GrowthShowcase />
@@ -125,8 +118,7 @@ export default function Home() {
         {/* Section 8: Process Timeline */}
         <ProcessTimeline />
 
-        {/* Section 9: Featured Case Studies */}
-        <CaseStudies />
+
 
         {/* Section 10: Tech Stack Flip Grid */}
         <TechStack />

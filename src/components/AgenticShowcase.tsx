@@ -87,6 +87,28 @@ export default function AgenticShowcase() {
       }
     };
 
+    const handleContextLost = (event: Event) => {
+      event.preventDefault();
+      console.warn("WebGL context lost on agentic canvas.");
+      if (RiveInstanceRef.current) {
+        try {
+          RiveInstanceRef.current.cleanup();
+        } catch (e) {}
+        RiveInstanceRef.current = null;
+      }
+    };
+
+    const handleContextRestored = () => {
+      console.log("WebGL context restored on agentic canvas. Re-initializing...");
+      initRive();
+    };
+
+    const canvas = document.getElementById("sprintRiveCanvas");
+    if (canvas) {
+      canvas.addEventListener("webglcontextlost", handleContextLost);
+      canvas.addEventListener("webglcontextrestored", handleContextRestored);
+    }
+
     loadRiveScript(() => {
       initRive();
     });
@@ -108,6 +130,11 @@ export default function AgenticShowcase() {
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      const canvas = document.getElementById("sprintRiveCanvas");
+      if (canvas) {
+        canvas.removeEventListener("webglcontextlost", handleContextLost);
+        canvas.removeEventListener("webglcontextrestored", handleContextRestored);
+      }
       if (RiveInstanceRef.current) {
         try {
           RiveInstanceRef.current.cleanup();

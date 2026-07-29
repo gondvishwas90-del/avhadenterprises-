@@ -148,6 +148,28 @@ export default function OperationsAutomation() {
       }
     };
 
+    const handleContextLost = (event: Event) => {
+      event.preventDefault();
+      console.warn("WebGL context lost on automation canvas.");
+      if (RiveInstanceRef.current) {
+        try {
+          RiveInstanceRef.current.cleanup();
+        } catch (e) {}
+        RiveInstanceRef.current = null;
+      }
+    };
+
+    const handleContextRestored = () => {
+      console.log("WebGL context restored on automation canvas. Re-initializing...");
+      initRive();
+    };
+
+    const canvas = document.getElementById("automationRiveCanvas");
+    if (canvas) {
+      canvas.addEventListener("webglcontextlost", handleContextLost);
+      canvas.addEventListener("webglcontextrestored", handleContextRestored);
+    }
+
     loadRiveScript(() => {
       initRive();
     });
@@ -169,6 +191,11 @@ export default function OperationsAutomation() {
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      const canvas = document.getElementById("automationRiveCanvas");
+      if (canvas) {
+        canvas.removeEventListener("webglcontextlost", handleContextLost);
+        canvas.removeEventListener("webglcontextrestored", handleContextRestored);
+      }
       if (RiveInstanceRef.current) {
         try {
           RiveInstanceRef.current.cleanup();
