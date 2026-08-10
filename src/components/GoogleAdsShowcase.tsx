@@ -9,15 +9,16 @@ import {
   TrendingUp,
   HelpCircle,
   Bell,
-  Check,
   CheckCircle2,
   Lock,
   Globe,
   MapPin,
-  FileText,
   Info,
+  Layers3,
+  ArrowLeft,
+  Settings,
   ChevronRight,
-  Layers3
+  Check
 } from "lucide-react";
 
 export default function GoogleAdsShowcase() {
@@ -27,10 +28,15 @@ export default function GoogleAdsShowcase() {
 
   // Form & showcase states preset for Nashik Dairy Products client
   const [campaignName, setCampaignName] = useState<string>("Search - Nashik Dairy Products - Nashik");
-  const [selectedGoal, setSelectedGoal] = useState<"leads" | "sales">("leads");
-  const [campaignType, setCampaignType] = useState<"search" | "pmax">("search");
-  const [biddingStrategy, setBiddingStrategy] = useState<"conversions" | "clicks">("conversions");
+  const [selectedGoal, setSelectedGoal] = useState<"leads" | "sales" | null>("leads");
+  const [campaignType, setCampaignType] = useState<"search" | "pmax" | null>(null);
+  const [biddingStrategy, setBiddingStrategy] = useState<"conversions" | "clicks" | null>(null);
   const [dailyBudget, setDailyBudget] = useState<number>(120);
+
+  const handleGoalSelect = (goal: "leads" | "sales") => {
+    setSelectedGoal((prev) => (prev === goal ? null : goal));
+    setCampaignType(null);
+  };
 
   // Auto-advance steps step-by-step when hovering anywhere over the container
   useEffect(() => {
@@ -73,69 +79,37 @@ export default function GoogleAdsShowcase() {
           </p>
         </div>
 
-        {/* ELEGANT AUTHENTIC GOOGLE ADS APPLICATION CONTAINER (HOVER AUTOMATED) */}
+        {/* ELEGANT AUTHENTIC GOOGLE ADS APPLICATION CONTAINER */}
         <div
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          className="rounded-2xl border border-zinc-300 bg-white text-zinc-900 shadow-[0_20px_70px_rgba(0,0,0,0.75)] overflow-hidden font-sans select-none transition-all duration-300 relative"
+          className="rounded-2xl border border-[#dadce0] bg-white text-zinc-900 shadow-[0_20px_70px_rgba(0,0,0,0.75)] overflow-hidden font-sans select-none transition-all duration-300 relative"
         >
           
-          {/* BROWSER TOP FRAME BAR */}
-          <div className="bg-[#f1f3f4] border-b border-zinc-300 px-4 py-2 flex items-center justify-between gap-4 text-xs">
-            <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-[#ff5f56] border border-[#e0443e]" />
-              <span className="w-3 h-3 rounded-full bg-[#ffbd2e] border border-[#dea123]" />
-              <span className="w-3 h-3 rounded-full bg-[#27c93f] border border-[#1aab29]" />
-            </div>
-
-            <div className="flex-1 max-w-md bg-white border border-zinc-300 rounded-md px-3 py-1 flex items-center gap-2 text-zinc-600 text-[11px] font-mono shadow-inner truncate">
-              <Lock className="w-3 h-3 text-emerald-600 flex-shrink-0" />
-              <span className="text-zinc-700 font-medium truncate">https://ads.google.com/aw/campaigns/new</span>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono bg-zinc-200 text-zinc-700 px-2 py-0.5 rounded font-semibold">GOOGLE ADS CONSOLE</span>
-            </div>
-          </div>
-
-          {/* GOOGLE ADS APPLICATION HEADER BAR (ZERO AVHAD BRANDING) */}
+          {/* GOOGLE ADS MAIN HEADER BAR */}
           <div className="bg-white border-b border-[#dadce0] px-4 sm:px-6 py-3 flex items-center justify-between gap-4 text-xs">
             
-            {/* Left Branding */}
-            <div className="flex items-center gap-3">
-              <button title="Close" className="text-zinc-500 hover:text-zinc-800 p-1 rounded-full hover:bg-zinc-100 transition">
-                <X className="w-4 h-4" />
-              </button>
-
-              <div className="h-5 w-px bg-zinc-300" />
-
-              <div className="flex items-center gap-2 font-medium text-zinc-700">
+            {/* Left Branding & Breadcrumbs aligned with Sidebar */}
+            <div className="flex items-center gap-0 min-w-0">
+              <div className="w-[180px] sm:w-[200px] flex-shrink-0 flex items-center gap-2 font-medium text-[#202124] border-r border-[#dadce0] pr-3 sm:pr-4 py-0.5">
                 <div className="flex items-center gap-0.5">
                   <span className="w-2.5 h-3.5 bg-[#ea4335] rounded-tl-sm rounded-br-sm transform -rotate-12" />
                   <span className="w-2.5 h-3.5 bg-[#fbbc04] rounded-tr-sm rounded-bl-sm transform rotate-12 -ml-1" />
                   <span className="w-2.5 h-3.5 bg-[#4285f4] rounded-sm -ml-1" />
                 </div>
-                <span className="font-semibold tracking-tight text-zinc-800 text-base">Google Ads</span>
+                <span className="font-semibold text-sm sm:text-base text-[#202124] tracking-tight">Google Ads</span>
               </div>
 
-              <div className="h-5 w-px bg-zinc-300 hidden sm:block" />
-
-              <div className="text-zinc-600 font-medium text-xs sm:text-sm hidden sm:block">
-                New campaign
+              <div className="text-[#5f6368] font-medium text-xs sm:text-sm flex items-center gap-1.5 pl-4 sm:pl-6 truncate">
+                <span>New campaign</span>
+                <span className="text-[#9aa0a6]">•</span>
+                <span className="text-[#202124] font-semibold truncate">Search Campaign</span>
               </div>
             </div>
 
-            {/* Right Account & Icons */}
-            <div className="flex items-center gap-3 text-zinc-600">
-              <button title="Help" className="p-1.5 rounded-full hover:bg-zinc-100 text-zinc-600 transition">
-                <HelpCircle className="w-4.5 h-4.5" />
-              </button>
-              <button title="Notifications" className="p-1.5 rounded-full hover:bg-zinc-100 text-zinc-600 transition relative">
-                <Bell className="w-4.5 h-4.5" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-[#1a73e8] rounded-full" />
-              </button>
-
-              <div className="hidden sm:flex items-center gap-2 bg-zinc-100 border border-zinc-300 rounded-full px-3.5 py-1 text-[11px] text-zinc-700 font-medium">
+            {/* Right Account Controls */}
+            <div className="flex items-center gap-2.5 text-[#5f6368] flex-shrink-0">
+              <div className="hidden sm:flex items-center gap-2 bg-[#f1f3f4] border border-[#dadce0] rounded-full px-3.5 py-1 text-[11px] text-[#202124] font-medium">
                 <span className="w-2 h-2 rounded-full bg-emerald-500" />
                 <span>Nashik Dairy Products (942-810-4491)</span>
               </div>
@@ -147,369 +121,381 @@ export default function GoogleAdsShowcase() {
 
           </div>
 
-          {/* MAIN APPLICATION WORKSPACE GRID */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 bg-[#f8f9fa] overflow-hidden">
+          {/* MAIN APPLICATION WORKSPACE CONTAINER */}
+          <div className="flex flex-row bg-white overflow-hidden min-h-[500px]">
             
-            {/* LEFT NAVIGATION SIDEBAR (HOVER INTERACTIVE) */}
-            <div className="lg:col-span-3.5 xl:col-span-3 bg-white border-b lg:border-b-0 lg:border-r border-[#dadce0] p-4 sm:p-5 space-y-4 flex flex-col justify-start">
+            {/* LEFT NAVIGATION SIDEBAR (AUTHENTIC GOOGLE MATERIAL STEPPER) */}
+            <div className="w-[180px] sm:w-[200px] flex-shrink-0 bg-white border-r border-[#dadce0] p-4 sm:p-5 flex flex-col justify-start">
               
-              <div className="text-[10px] font-mono uppercase tracking-widest text-zinc-600 px-1 font-bold">
-                CAMPAIGN CREATION STEPS
-              </div>
-
-              <div className="space-y-2 text-xs">
+              {/* VERTICAL STEPPER TIMELINE */}
+              <div className="space-y-5 relative">
+                
                 {/* STEP 1 */}
-                <button
+                <div
                   onMouseEnter={() => setActiveTab("step1")}
                   onClick={() => setActiveTab("step1")}
-                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all duration-200 text-left ${
-                    activeTab === "step1"
-                      ? "bg-[#e8f0fe] text-[#1a73e8] font-bold border-l-4 border-[#1a73e8] shadow-sm"
-                      : "text-zinc-700 hover:bg-zinc-100 font-medium"
-                  }`}
+                  className="flex items-center gap-3 cursor-pointer group py-1"
                 >
-                  <div className="flex items-start gap-2.5">
-                    <Sparkles className={`w-4 h-4 mt-0.5 flex-shrink-0 ${activeTab === "step1" ? "text-[#1a73e8]" : "text-zinc-600"}`} />
-                    <div>
-                      <div className="text-xs font-bold leading-none">Step 1: Foundation</div>
-                      <div className="text-[11px] text-zinc-600 mt-1 font-normal">Objective & Type</div>
-                    </div>
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all flex-shrink-0 z-10 ${
+                    activeTab === "step1"
+                      ? "bg-[#1a73e8] text-white shadow-sm"
+                      : activeTab === "step2" || activeTab === "review"
+                      ? "bg-[#e8f0fe] text-[#1a73e8] border border-[#1a73e8]"
+                      : "bg-white border-2 border-[#5f6368] text-[#5f6368]"
+                  }`}>
+                    {activeTab === "step2" || activeTab === "review" ? <Check className="w-4 h-4 stroke-[3]" /> : "1"}
                   </div>
-                  <ChevronRight className={`w-4 h-4 ${activeTab === "step1" ? "text-[#1a73e8]" : "text-zinc-400"}`} />
-                </button>
+                  
+                  <div className={`text-xs sm:text-[13px] transition-colors ${
+                    activeTab === "step1" ? "font-bold text-[#1a73e8]" : "font-semibold text-[#202124] group-hover:text-[#1a73e8]"
+                  }`}>
+                    Goal & Type
+                  </div>
+                </div>
 
                 {/* STEP 2 */}
-                <button
+                <div
                   onMouseEnter={() => setActiveTab("step2")}
                   onClick={() => setActiveTab("step2")}
-                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all duration-200 text-left ${
-                    activeTab === "step2"
-                      ? "bg-[#e8f0fe] text-[#1a73e8] font-bold border-l-4 border-[#1a73e8] shadow-sm"
-                      : "text-zinc-700 hover:bg-zinc-100 font-medium"
-                  }`}
+                  className="flex items-center gap-3 cursor-pointer group py-1"
                 >
-                  <div className="flex items-start gap-2.5">
-                    <TrendingUp className={`w-4 h-4 mt-0.5 flex-shrink-0 ${activeTab === "step2" ? "text-[#1a73e8]" : "text-zinc-600"}`} />
-                    <div>
-                      <div className="text-xs font-bold leading-none">Step 2: Budget & Bidding</div>
-                      <div className="text-[11px] text-zinc-600 mt-1 font-normal">Budget, Strategy & Target</div>
-                    </div>
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all flex-shrink-0 z-10 ${
+                    activeTab === "step2"
+                      ? "bg-[#1a73e8] text-white shadow-sm"
+                      : activeTab === "review"
+                      ? "bg-[#e8f0fe] text-[#1a73e8] border border-[#1a73e8]"
+                      : "bg-white border-2 border-[#5f6368] text-[#5f6368]"
+                  }`}>
+                    {activeTab === "review" ? <Check className="w-4 h-4 stroke-[3]" /> : "2"}
                   </div>
-                  <ChevronRight className={`w-4 h-4 ${activeTab === "step2" ? "text-[#1a73e8]" : "text-zinc-400"}`} />
-                </button>
+                  
+                  <div className={`text-xs sm:text-[13px] transition-colors ${
+                    activeTab === "step2" ? "font-bold text-[#1a73e8]" : "font-semibold text-[#202124] group-hover:text-[#1a73e8]"
+                  }`}>
+                    Budget & Bidding
+                  </div>
+                </div>
 
-                <div className="my-2 border-t border-[#e8eaed]" />
-
-                {/* REVIEW */}
-                <button
+                {/* STEP 3 */}
+                <div
                   onMouseEnter={() => setActiveTab("review")}
                   onClick={() => setActiveTab("review")}
-                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all duration-200 text-left ${
-                    activeTab === "review"
-                      ? "bg-[#e8f0fe] text-[#1a73e8] font-bold border-l-4 border-[#1a73e8] shadow-sm"
-                      : "text-zinc-700 hover:bg-zinc-100 font-medium"
-                  }`}
+                  className="flex items-center gap-3 cursor-pointer group py-1"
                 >
-                  <div className="flex items-center gap-2.5">
-                    <Info className={`w-4 h-4 ${activeTab === "review" ? "text-[#1a73e8]" : "text-zinc-600"}`} />
-                    <span className="font-bold">Review & Publish</span>
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all flex-shrink-0 z-10 ${
+                    activeTab === "review"
+                      ? "bg-[#1a73e8] text-white shadow-sm"
+                      : "bg-white border-2 border-[#5f6368] text-[#5f6368]"
+                  }`}>
+                    3
                   </div>
-                </button>
+                  
+                  <div className={`text-xs sm:text-[13px] transition-colors ${
+                    activeTab === "review" ? "font-bold text-[#1a73e8]" : "font-semibold text-[#202124] group-hover:text-[#1a73e8]"
+                  }`}>
+                    Review & Publish
+                  </div>
+                </div>
+
               </div>
 
             </div>
 
             {/* RIGHT MAIN WORKSPACE AREA */}
-            <div className="lg:col-span-8.5 xl:col-span-9 p-4 sm:p-6 md:p-7 flex flex-col justify-start space-y-7 text-zinc-900 min-h-[480px]">
+            <div className="flex-1 min-w-0 py-6 sm:py-8 px-5 sm:px-8 flex flex-col justify-between text-zinc-900 min-h-[480px]">
+              <div className="max-w-5xl w-full space-y-7">
               
-              {/* STEP 1: SET YOUR FOUNDATION (OBJECTIVE & TYPE) */}
-              {activeTab === "step1" && (
-                <div className="flex flex-col gap-6 sm:gap-7 w-full animate-fadeIn">
-                  
-                  {/* CAMPAIGN NAME INPUT */}
-                  <div className="space-y-2">
-                    <div className="text-xs font-extrabold text-[#000000] uppercase tracking-wider px-1">Campaign Identifier</div>
-                    <input
-                      type="text"
-                      value={campaignName}
-                      onChange={(e) => setCampaignName(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl border border-[#dadce0] focus:border-[#1a73e8] focus:ring-2 focus:ring-[#1a73e8]/20 outline-none text-xs sm:text-sm font-semibold text-[#000000] bg-white transition shadow-sm"
-                      placeholder="Search - Nashik Dairy Products - Nashik"
-                    />
-                  </div>
-
-                  {/* GOAL SELECTION SECTION */}
-                  <div className="space-y-2.5">
-                    <div className="text-xs font-extrabold text-[#000000] uppercase tracking-wider px-1">1. Select Campaign Goal</div>
+                {/* STEP 1: OBJECTIVE & TYPE */}
+                {activeTab === "step1" && (
+                  <div className="flex flex-col gap-8 w-full animate-fadeIn">
                     
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-                      {/* Goal: Leads */}
-                      <div
-                        onClick={() => setSelectedGoal("leads")}
-                        className={`p-4 sm:p-5 rounded-2xl transition cursor-pointer relative bg-white flex flex-col justify-between space-y-3 ${
-                          selectedGoal === "leads"
-                            ? "border-2 border-[#1a73e8] bg-[#f8faff] shadow-sm"
-                            : "border border-[#dadce0] hover:border-zinc-400"
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <Tag className={`w-5 h-5 ${selectedGoal === "leads" ? "text-[#1a73e8]" : "text-zinc-600"}`} />
-                          {selectedGoal === "leads" ? (
-                            <div className="w-5 h-5 rounded-full bg-[#1a73e8] text-white flex items-center justify-center shadow-sm">
-                              <Check className="w-3.5 h-3.5 stroke-[3]" />
-                            </div>
-                          ) : (
-                            <div className="w-5 h-5 rounded-full border border-[#dadce0]" />
-                          )}
-                        </div>
+                    {/* CAMPAIGN NAME SECTION */}
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-[#202124] block">Campaign Name</label>
+                      <input
+                        type="text"
+                        value={campaignName}
+                        onChange={(e) => setCampaignName(e.target.value)}
+                        className="w-full px-4 py-2.5 rounded-lg border border-[#dadce0] focus:border-[#1a73e8] focus:ring-2 focus:ring-[#1a73e8]/20 outline-none text-xs sm:text-sm font-medium text-[#202124] bg-white transition shadow-sm"
+                        placeholder="Search - Nashik Dairy Products - Nashik"
+                      />
+                    </div>
 
-                        <div className="space-y-1">
-                          <div className="text-xs sm:text-[13px] font-extrabold text-[#000000] leading-tight">Leads (Form Submissions & Direct Calls)</div>
-                          <div className="text-[11px] text-[#3c4043] leading-relaxed font-medium">
-                            Get qualified inquiries and order requests for daily milk delivery & fresh paneer.
+                    {/* GOAL SELECTION SECTION */}
+                    <div className="space-y-3">
+                      <div>
+                        <div className="text-sm font-bold text-[#202124]">1. Select a campaign goal</div>
+                        <div className="text-xs text-[#5f6368] mt-0.5">Choose what you want this campaign to achieve for your business.</div>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {/* Goal: Leads */}
+                        <div
+                          onClick={() => handleGoalSelect("leads")}
+                          className={`p-4 rounded-xl transition-all duration-200 cursor-pointer relative flex items-start gap-3.5 border-2 ${
+                            selectedGoal === "leads"
+                              ? "border-[#1a73e8] bg-[#f8faff] shadow-sm opacity-100"
+                              : "border-[#dadce0] bg-white hover:border-[#bdc1c6] opacity-75 hover:opacity-100"
+                          }`}
+                        >
+                          <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${
+                            selectedGoal === "leads" ? "bg-[#e8f0fe] text-[#1a73e8]" : "bg-[#f1f3f4] text-[#5f6368]"
+                          }`}>
+                            <Tag className="w-4.5 h-4.5" />
+                          </div>
+
+                          <div className="space-y-0.5 min-w-0 flex-1">
+                            <div className="text-xs sm:text-[13px] font-bold text-[#202124]">
+                              Leads
+                            </div>
+                            <div className="text-[11px] text-[#5f6368] leading-relaxed font-normal">
+                              Get qualified inquiries and phone calls for daily milk subscription & paneer orders.
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      {/* Goal: Sales */}
-                      <div
-                        onClick={() => setSelectedGoal("sales")}
-                        className={`p-4 sm:p-5 rounded-2xl transition cursor-pointer relative bg-white flex flex-col justify-between space-y-3 ${
-                          selectedGoal === "sales"
-                            ? "border-2 border-[#1a73e8] bg-[#f8faff] shadow-sm"
-                            : "border border-[#dadce0] hover:border-zinc-400"
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <TrendingUp className={`w-5 h-5 ${selectedGoal === "sales" ? "text-[#1a73e8]" : "text-zinc-600"}`} />
-                          {selectedGoal === "sales" ? (
-                            <div className="w-5 h-5 rounded-full bg-[#1a73e8] text-white flex items-center justify-center shadow-sm">
-                              <Check className="w-3.5 h-3.5 stroke-[3]" />
+                        {/* Goal: Sales */}
+                        <div
+                          onClick={() => handleGoalSelect("sales")}
+                          className={`p-4 rounded-xl transition-all duration-200 cursor-pointer relative flex items-start gap-3.5 border-2 ${
+                            selectedGoal === "sales"
+                              ? "border-[#1a73e8] bg-[#f8faff] shadow-sm opacity-100"
+                              : "border-[#dadce0] bg-white hover:border-[#bdc1c6] opacity-75 hover:opacity-100"
+                          }`}
+                        >
+                          <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${
+                            selectedGoal === "sales" ? "bg-[#e8f0fe] text-[#1a73e8]" : "bg-[#f1f3f4] text-[#5f6368]"
+                          }`}>
+                            <TrendingUp className="w-4.5 h-4.5" />
+                          </div>
+
+                          <div className="space-y-0.5 min-w-0 flex-1">
+                            <div className="text-xs sm:text-[13px] font-bold text-[#202124]">
+                              Sales
                             </div>
-                          ) : (
-                            <div className="w-5 h-5 rounded-full border border-[#dadce0]" />
-                          )}
-                        </div>
-
-                        <div className="space-y-1">
-                          <div className="text-xs sm:text-[13px] font-extrabold text-[#000000] leading-tight">Sales (Direct Purchase / Ecommerce)</div>
-                          <div className="text-[11px] text-[#3c4043] leading-relaxed font-medium">
-                            Drive online orders directly on your store for dairy subscription packages.
+                            <div className="text-[11px] text-[#5f6368] leading-relaxed font-normal">
+                              Drive online store orders directly for subscription packages and fresh dairy items.
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* CAMPAIGN TYPE SECTION */}
-                  <div className="space-y-2.5">
-                    <div className="text-xs font-extrabold text-[#000000] uppercase tracking-wider px-1">2. Select Campaign Type</div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-                      {/* Type: Search */}
-                      <div
-                        onClick={() => setCampaignType("search")}
-                        className={`p-4 sm:p-5 rounded-2xl transition cursor-pointer relative bg-white flex flex-col justify-between space-y-3 ${
-                          campaignType === "search"
-                            ? "border-2 border-[#1a73e8] bg-[#f8faff] shadow-sm"
-                            : "border border-[#dadce0] hover:border-zinc-400"
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <MousePointerClick className={`w-5 h-5 ${campaignType === "search" ? "text-[#1a73e8]" : "text-zinc-600"}`} />
-                          {campaignType === "search" ? (
-                            <div className="w-5 h-5 rounded-full bg-[#1a73e8] text-white flex items-center justify-center shadow-sm">
-                              <Check className="w-3.5 h-3.5 stroke-[3]" />
-                            </div>
-                          ) : (
-                            <div className="w-5 h-5 rounded-full border border-[#dadce0]" />
-                          )}
-                        </div>
-
-                        <div className="space-y-1">
-                          <div className="text-xs sm:text-[13px] font-extrabold text-[#000000] leading-tight">Search Campaign</div>
-                          <div className="text-[11px] text-[#3c4043] leading-relaxed font-medium">
-                            Show text ads when customers search for "fresh A2 milk near me" on Google.
-                          </div>
-                        </div>
+                    {/* CAMPAIGN TYPE SECTION */}
+                    <div className="space-y-3">
+                      <div>
+                        <div className="text-sm font-bold text-[#202124]">2. Select a campaign type</div>
+                        <div className="text-xs text-[#5f6368] mt-0.5">Select how you want your ads to reach target customers on Google.</div>
                       </div>
 
-                      {/* Type: Performance Max */}
-                      <div
-                        onClick={() => setCampaignType("pmax")}
-                        className={`p-4 sm:p-5 rounded-2xl transition cursor-pointer relative bg-white flex flex-col justify-between space-y-3 ${
-                          campaignType === "pmax"
-                            ? "border-2 border-[#1a73e8] bg-[#f8faff] shadow-sm"
-                            : "border border-[#dadce0] hover:border-zinc-400"
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <Layers3 className={`w-5 h-5 ${campaignType === "pmax" ? "text-[#1a73e8]" : "text-zinc-600"}`} />
-                          {campaignType === "pmax" ? (
-                            <div className="w-5 h-5 rounded-full bg-[#1a73e8] text-white flex items-center justify-center shadow-sm">
-                              <Check className="w-3.5 h-3.5 stroke-[3]" />
-                            </div>
-                          ) : (
-                            <div className="w-5 h-5 rounded-full border border-[#dadce0]" />
-                          )}
-                        </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {/* Type: Search */}
+                        <div
+                          onClick={() => setCampaignType((prev) => (prev === "search" ? null : "search"))}
+                          className={`p-4 rounded-xl transition-all duration-200 cursor-pointer relative flex items-start gap-3.5 border-2 ${
+                            campaignType === "search"
+                              ? "border-[#1a73e8] bg-[#f8faff] shadow-sm opacity-100"
+                              : "border-[#dadce0] bg-white hover:border-[#bdc1c6] opacity-75 hover:opacity-100"
+                          }`}
+                        >
+                          <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${
+                            campaignType === "search" ? "bg-[#e8f0fe] text-[#1a73e8]" : "bg-[#f1f3f4] text-[#5f6368]"
+                          }`}>
+                            <MousePointerClick className="w-4.5 h-4.5" />
+                          </div>
 
-                        <div className="space-y-1">
-                          <div className="text-xs sm:text-[13px] font-extrabold text-[#000000] leading-tight">Performance Max</div>
-                          <div className="text-[11px] text-[#3c4043] leading-relaxed font-medium">
-                            Automated ads across Search, YouTube, Display, Gmail, and Google Maps.
+                          <div className="space-y-0.5 min-w-0 flex-1">
+                            <div className="text-xs sm:text-[13px] font-bold text-[#202124]">
+                              Search
+                            </div>
+                            <div className="text-[11px] text-[#5f6368] leading-relaxed font-normal">
+                              Get in front of high-intent customers searching for "fresh A2 milk near me".
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                  </div>
 
-                </div>
-              )}
-
-              {/* STEP 2: CONFIGURE BUDGET, BIDDING & TARGETING */}
-              {activeTab === "step2" && (
-                <div className="flex flex-col gap-6 sm:gap-7 w-full animate-fadeIn">
-                  
-                  {/* BIDDING STRATEGY SECTION */}
-                  <div className="space-y-2.5">
-                    <div className="text-xs font-extrabold text-[#000000] uppercase tracking-wider px-1">1. Select Bidding Strategy</div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-                      {/* Maximize Conversions */}
-                      <div
-                        onClick={() => setBiddingStrategy("conversions")}
-                        className={`p-4 sm:p-5 rounded-2xl transition cursor-pointer relative bg-white flex flex-col justify-between space-y-3 ${
-                          biddingStrategy === "conversions"
-                            ? "border-2 border-[#1a73e8] bg-[#f8faff] shadow-sm"
-                            : "border border-[#dadce0] hover:border-zinc-400"
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <Tag className={`w-5 h-5 ${biddingStrategy === "conversions" ? "text-[#1a73e8]" : "text-zinc-600"}`} />
-                          {biddingStrategy === "conversions" ? (
-                            <div className="w-5 h-5 rounded-full bg-[#1a73e8] text-white flex items-center justify-center shadow-sm">
-                              <Check className="w-3.5 h-3.5 stroke-[3]" />
-                            </div>
-                          ) : (
-                            <div className="w-5 h-5 rounded-full border border-[#dadce0]" />
-                          )}
-                        </div>
-
-                        <div className="space-y-1">
-                          <div className="text-xs sm:text-[13px] font-extrabold text-[#000000] leading-tight">Maximize Conversions</div>
-                          <div className="text-[11px] text-[#3c4043] leading-relaxed font-medium">
-                            Automatically set bids to get the most leads within your daily budget.
+                        {/* Type: Performance Max */}
+                        <div
+                          onClick={() => setCampaignType((prev) => (prev === "pmax" ? null : "pmax"))}
+                          className={`p-4 rounded-xl transition-all duration-200 cursor-pointer relative flex items-start gap-3.5 border-2 ${
+                            campaignType === "pmax"
+                              ? "border-[#1a73e8] bg-[#f8faff] shadow-sm opacity-100"
+                              : "border-[#dadce0] bg-white hover:border-[#bdc1c6] opacity-75 hover:opacity-100"
+                          }`}
+                        >
+                          <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${
+                            campaignType === "pmax" ? "bg-[#e8f0fe] text-[#1a73e8]" : "bg-[#f1f3f4] text-[#5f6368]"
+                          }`}>
+                            <Layers3 className="w-4.5 h-4.5" />
                           </div>
-                        </div>
-                      </div>
 
-                      {/* Maximize Clicks */}
-                      <div
-                        onClick={() => setBiddingStrategy("clicks")}
-                        className={`p-4 sm:p-5 rounded-2xl transition cursor-pointer relative bg-white flex flex-col justify-between space-y-3 ${
-                          biddingStrategy === "clicks"
-                            ? "border-2 border-[#1a73e8] bg-[#f8faff] shadow-sm"
-                            : "border border-[#dadce0] hover:border-zinc-400"
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <MousePointerClick className={`w-5 h-5 ${biddingStrategy === "clicks" ? "text-[#1a73e8]" : "text-zinc-600"}`} />
-                          {biddingStrategy === "clicks" ? (
-                            <div className="w-5 h-5 rounded-full bg-[#1a73e8] text-white flex items-center justify-center shadow-sm">
-                              <Check className="w-3.5 h-3.5 stroke-[3]" />
+                          <div className="space-y-0.5 min-w-0 flex-1">
+                            <div className="text-xs sm:text-[13px] font-bold text-[#202124]">
+                              Performance Max
                             </div>
-                          ) : (
-                            <div className="w-5 h-5 rounded-full border border-[#dadce0]" />
-                          )}
-                        </div>
-
-                        <div className="space-y-1">
-                          <div className="text-xs sm:text-[13px] font-extrabold text-[#000000] leading-tight">Maximize Clicks</div>
-                          <div className="text-[11px] text-[#3c4043] leading-relaxed font-medium">
-                            Focus on driving maximum traffic volume to build initial brand awareness.
+                            <div className="text-[11px] text-[#5f6368] leading-relaxed font-normal">
+                              Reach audiences across Search, YouTube, Gmail, Maps, and Display networks.
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
+
                   </div>
+                )}
 
-                  {/* DAILY BUDGET SLIDER CONTAINER */}
-                  <div className="space-y-2.5">
-                    <div className="text-xs font-extrabold text-[#000000] uppercase tracking-wider px-1">2. Set Daily Budget & Target</div>
+                {/* STEP 2: BUDGET & BIDDING */}
+                {activeTab === "step2" && (
+                  <div className="flex flex-col gap-8 w-full animate-fadeIn">
+                    
+                    {/* BIDDING STRATEGY SECTION */}
+                    <div className="space-y-3">
+                      <div>
+                        <div className="text-sm font-bold text-[#202124]">1. Bidding Strategy</div>
+                        <div className="text-xs text-[#5f6368] mt-0.5">Select how Google Ads optimizes bidding for your daily budget.</div>
+                      </div>
 
-                    <div className="bg-white rounded-2xl border border-[#dadce0] p-4 sm:p-5 space-y-3.5 shadow-sm">
-                      <div className="flex items-center justify-between border-b border-zinc-100 pb-2.5">
-                        <span className="text-xs font-mono font-bold text-[#000000] tracking-wider uppercase">AVERAGE DAILY BUDGET</span>
-                        <span className="text-xs sm:text-sm font-mono font-extrabold text-[#1a73e8]">
-                          ${dailyBudget}.00 / day (₹{dailyBudget * 85}/day)
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {/* Maximize Conversions */}
+                        <div
+                          onClick={() => setBiddingStrategy((prev) => (prev === "conversions" ? null : "conversions"))}
+                          className={`p-4 rounded-xl transition-all duration-200 cursor-pointer relative flex items-start gap-3.5 border-2 ${
+                            biddingStrategy === "conversions"
+                              ? "border-[#1a73e8] bg-[#f8faff] shadow-sm opacity-100"
+                              : "border-[#dadce0] bg-white hover:border-[#bdc1c6] opacity-75 hover:opacity-100"
+                          }`}
+                        >
+                          <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${
+                            biddingStrategy === "conversions" ? "bg-[#e8f0fe] text-[#1a73e8]" : "bg-[#f1f3f4] text-[#5f6368]"
+                          }`}>
+                            <Tag className="w-4.5 h-4.5" />
+                          </div>
+
+                          <div className="space-y-0.5 min-w-0 flex-1">
+                            <div className="text-xs sm:text-[13px] font-bold text-[#202124]">
+                              Maximize Conversions
+                            </div>
+                            <div className="text-[11px] text-[#5f6368] leading-relaxed font-normal">
+                              Automatically set bids to get the highest volume of leads within your budget.
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Maximize Clicks */}
+                        <div
+                          onClick={() => setBiddingStrategy((prev) => (prev === "clicks" ? null : "clicks"))}
+                          className={`p-4 rounded-xl transition-all duration-200 cursor-pointer relative flex items-start gap-3.5 border-2 ${
+                            biddingStrategy === "clicks"
+                              ? "border-[#1a73e8] bg-[#f8faff] shadow-sm opacity-100"
+                              : "border-[#dadce0] bg-white hover:border-[#bdc1c6] opacity-75 hover:opacity-100"
+                          }`}
+                        >
+                          <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${
+                            biddingStrategy === "clicks" ? "bg-[#e8f0fe] text-[#1a73e8]" : "bg-[#f1f3f4] text-[#5f6368]"
+                          }`}>
+                            <MousePointerClick className="w-4.5 h-4.5" />
+                          </div>
+
+                          <div className="space-y-0.5 min-w-0 flex-1">
+                            <div className="text-xs sm:text-[13px] font-bold text-[#202124]">
+                              Maximize Clicks
+                            </div>
+                            <div className="text-[11px] text-[#5f6368] leading-relaxed font-normal">
+                              Focus on driving maximum traffic volume to build brand awareness.
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* DAILY BUDGET SECTION */}
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between gap-4 flex-wrap">
+                        <div>
+                          <div className="text-sm font-bold text-[#202124]">2. Set your average daily budget</div>
+                          <div className="text-xs text-[#5f6368] mt-0.5">The average amount you want to spend each day.</div>
+                        </div>
+
+                        <span className="bg-[#e8f0fe] text-[#1a73e8] font-semibold text-xs px-3 py-1 rounded-full inline-flex items-center gap-1.5">
+                          <Sparkles className="w-3.5 h-3.5" />
+                          <span>Recommended for Nashik region</span>
                         </span>
                       </div>
 
-                      <input
-                        type="range"
-                        min="25"
-                        max="500"
-                        step="5"
-                        value={dailyBudget}
-                        onChange={(e) => setDailyBudget(Number(e.target.value))}
-                        className="w-full accent-[#1a73e8] cursor-pointer h-2 bg-[#e0e0e0] rounded-full appearance-none"
-                      />
+                      <div className="bg-white border border-[#dadce0] rounded-xl p-4 sm:p-5 space-y-3.5 shadow-sm">
+                        <div className="flex items-center justify-between border-b border-[#dadce0] pb-2.5">
+                          <span className="text-xs font-mono font-bold text-[#5f6368] tracking-wider uppercase">AVERAGE DAILY BUDGET</span>
+                          <span className="text-xs sm:text-sm font-mono font-bold text-[#1a73e8]">
+                            ${dailyBudget}.00 / day (₹{dailyBudget * 85}/day)
+                          </span>
+                        </div>
 
-                      <div className="flex justify-between text-xs pt-0.5">
-                        <div>
-                          <div className="font-extrabold text-[#000000]">$25/day</div>
-                          <div className="text-[11px] text-[#3c4043] font-medium">Starter</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="font-extrabold text-[#1a73e8]">$120/day</div>
-                          <div className="text-[11px] text-[#1a73e8] font-semibold">Recommended</div>
-                        </div>
-                        <div className="text-right">
-                          <div className="font-extrabold text-[#000000]">$500/day</div>
-                          <div className="text-[11px] text-[#3c4043] font-medium">Enterprise</div>
+                        <input
+                          type="range"
+                          min="25"
+                          max="500"
+                          step="5"
+                          value={dailyBudget}
+                          onChange={(e) => setDailyBudget(Number(e.target.value))}
+                          className="w-full accent-[#1a73e8] cursor-pointer h-2 bg-[#dadce0] rounded-full appearance-none"
+                        />
+
+                        <div className="flex justify-between text-xs pt-0.5 text-[#5f6368]">
+                          <div>
+                            <div className="font-bold text-[#202124]">$25/day</div>
+                            <div className="text-[11px]">Starter</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="font-bold text-[#1a73e8]">$120/day</div>
+                            <div className="text-[11px] font-semibold text-[#1a73e8]">Recommended</div>
+                          </div>
+                          <div className="text-right">
+                            <div className="font-bold text-[#202124]">$500/day</div>
+                            <div className="text-[11px]">Enterprise</div>
+                          </div>
                         </div>
                       </div>
                     </div>
+
+                    {/* LOCATION & LANGUAGE TARGETING CARDS */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {/* Location */}
+                      <div className="p-4.5 rounded-xl border border-[#dadce0] bg-white space-y-2 shadow-sm">
+                        <div className="flex items-center gap-2 text-xs font-bold text-[#202124]">
+                          <MapPin className="w-4 h-4 text-[#1a73e8]" />
+                          <span>Location Radius</span>
+                        </div>
+                        <div className="w-full px-3 py-1.5 bg-[#f8f9fa] border border-[#dadce0] text-xs font-mono font-medium text-[#202124] rounded-lg shadow-inner truncate">
+                          Nashik, Maharashtra (25km Radius Focus)
+                        </div>
+                      </div>
+
+                      {/* Language */}
+                      <div className="p-4.5 rounded-xl border border-[#dadce0] bg-white space-y-2 shadow-sm">
+                        <div className="flex items-center gap-2 text-xs font-bold text-[#202124]">
+                          <Globe className="w-4 h-4 text-[#1a73e8]" />
+                          <span>Audience Languages</span>
+                        </div>
+                        <div className="flex gap-1.5 flex-wrap">
+                          <span className="px-2.5 py-1 rounded-md bg-[#f8f9fa] border border-[#dadce0] font-mono text-xs font-medium text-[#202124]">English</span>
+                          <span className="px-2.5 py-1 rounded-md bg-[#f8f9fa] border border-[#dadce0] font-mono text-xs font-medium text-[#202124]">Marathi</span>
+                          <span className="px-2.5 py-1 rounded-md bg-[#f8f9fa] border border-[#dadce0] font-mono text-xs font-medium text-[#202124]">Hindi</span>
+                        </div>
+                      </div>
+                    </div>
+
                   </div>
+                )}
 
-                  {/* LOCATION RADIUS & AUDIENCE LANGUAGES INPUT CARDS */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-                    {/* Location */}
-                    <div className="p-4 sm:p-5 rounded-2xl border border-[#dadce0] bg-white space-y-2 shadow-sm">
-                      <div className="flex items-center gap-2 text-xs font-extrabold text-[#000000]">
-                        <MapPin className="w-4 h-4 text-[#1a73e8]" />
-                        <span>Location Radius</span>
-                      </div>
-                      <div className="w-full px-3.5 py-1.5 bg-[#f8f9fa] border border-[#dadce0] text-xs font-mono font-medium text-[#000000] rounded-full shadow-inner truncate">
-                        Nashik, Maharashtra (25km Radius Focus)
-                      </div>
-                    </div>
-
-                    {/* Language */}
-                    <div className="p-4 sm:p-5 rounded-2xl border border-[#dadce0] bg-white space-y-2 shadow-sm">
-                      <div className="flex items-center gap-2 text-xs font-extrabold text-[#000000]">
-                        <Globe className="w-4 h-4 text-[#1a73e8]" />
-                        <span>Audience Languages</span>
-                      </div>
-                      <div className="flex gap-1.5 flex-wrap">
-                        <span className="px-3 py-1 rounded-full bg-[#f8f9fa] border border-[#dadce0] font-mono text-xs font-medium text-[#000000] shadow-inner">English</span>
-                        <span className="px-3 py-1 rounded-full bg-[#f8f9fa] border border-[#dadce0] font-mono text-xs font-medium text-[#000000] shadow-inner">Marathi</span>
-                        <span className="px-3 py-1 rounded-full bg-[#f8f9fa] border border-[#dadce0] font-mono text-xs font-medium text-[#000000] shadow-inner">Hindi</span>
-                      </div>
-                    </div>
+                {/* STEP 3: REVIEW STEP (CENTER ALIGNED ONLY) */}
+                {activeTab === "review" && (
+                  <div className="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-3 animate-fadeIn my-auto min-h-[350px] w-full">
+                    <CheckCircle2 className="w-16 h-16 text-emerald-500 mx-auto stroke-[2.5]" />
+                    <h3 className="text-3xl sm:text-4xl font-black !text-[#000000] tracking-tight" style={{ color: "#000000" }}>Done</h3>
                   </div>
+                )}
 
-                </div>
-              )}
-
-              {/* REVIEW STEP */}
-              {activeTab === "review" && (
-                <div className="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-3 animate-fadeIn my-auto">
-                  <CheckCircle2 className="w-16 h-16 text-emerald-500 mx-auto stroke-[2.5]" />
-                  <h3 className="text-3xl sm:text-4xl font-black text-black tracking-tight" style={{ color: "#000000" }}>Done</h3>
-                </div>
-              )}
+              </div>
 
             </div>
 
