@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import GrowthShowcase from "@/components/GrowthShowcase";
+import GoogleAdsShowcase from "@/components/GoogleAdsShowcase";
 import StudioTechSection from "@/components/StudioTechSection";
 import LogoMarquee from "@/components/LogoMarquee";
 import Metrics from "@/components/Metrics";
@@ -91,11 +91,11 @@ export default function Home() {
         {/* Section 1.6.1: Premium 3D E-Commerce Fulfillment Cockpit */}
         <EcommerceFulfillmentSection />
 
+        {/* Section 1.6.2: Google Ads (SEM) Interactive Growth Engine (Razorpay Sprint '26 Inspired) */}
+        <GoogleAdsShowcase />
+
         {/* Section 1.6.5: StudioTech Globe Section */}
         <StudioTechSection />
-
-        {/* Section 1.6.4: Razorpay-inspired Growth Showcase */}
-        <GrowthShowcase />
 
         {/* Section 2: Logo Ticker */}
         <LogoMarquee />
