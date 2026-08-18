@@ -21,6 +21,7 @@ import Contact from "@/components/Contact";
 import FinalCTA from "@/components/FinalCTA";
 import Footer from "@/components/Footer";
 import Preloader from "@/components/Preloader";
+import LaptopShowcase from "@/components/LaptopShowcase";
 import dynamic from "next/dynamic";
 
 const Agentation = dynamic(
@@ -96,6 +97,9 @@ export default function Home() {
 
         {/* Section 1.6.5: StudioTech Globe Section */}
         <StudioTechSection />
+
+        {/* Section 1.7: Ultra-Realistic MacBook Live Web Showcase */}
+        <LaptopShowcase />
 
         {/* Section 2: Logo Ticker */}
         <LogoMarquee />
